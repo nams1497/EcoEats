@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Updated App.js
 
 import React, { useState } from 'react';
@@ -151,13 +152,48 @@ function App() {
         </Dialog>
 
         {/* ... other components and JSX */}
+=======
+// App.js
+import React, { useState } from 'react';
+import InventoryList from './components/InventoryList';
+import './App.css';
+
+function App() {
+  // Sample data for inventory items
+  const [inventory, setInventory] = useState([
+    { id: 1, name: 'Apple', amount: 2, spent: '$2', expiryDate: '15 Apr 2024', status: 'Not Expired' },
+    // ...other items
+  ]);
+
+  // Function to add new item
+  const addItem = () => {
+    // Define logic to add new item
+  };
+
+  // Function to handle scan
+  const scanItem = () => {
+    // Define logic to scan item
+  };
+
+  return (
+    <div className="App">
+      <header>Your Fridge</header>
+      <InventoryList inventory={inventory} />
+      <div className="actions">
+        <button onClick={scanItem}>Scan</button>
+        <button onClick={addItem}>Add</button>
+        {/* Other components like buttons for import/export here */}
+>>>>>>> 24ce2c4 (inventory folder)
       </div>
     </div>
   );
 }
 
 export default App;
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> 24ce2c4 (inventory folder)

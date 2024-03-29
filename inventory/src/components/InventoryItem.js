@@ -17,6 +17,7 @@ function InventoryItem({ item }) {
 }
 
 export default InventoryItem;
+<<<<<<< HEAD
 
 
 // // InventoryItem.js
@@ -39,3 +40,5 @@ export default InventoryItem;
 // }
 
 // export default InventoryItem;
+=======
+>>>>>>> 24ce2c4 (inventory folder)
