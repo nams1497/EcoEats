@@ -1,3 +1,5 @@
+// Updated App.js
+
 import React, { useState } from 'react';
 import Webcam from 'react-webcam';
 import InventoryList from './components/InventoryList';
@@ -47,35 +49,55 @@ function App() {
   };
 
   const handleScanItem = () => {
-    // Define logic for scanning item
-    // For simplicity, let's just toggle the scan popup for now
-    setShowScanPopup(!showScanPopup);
+    // Capture picture from webcam
+    const imageSrc = webcamRef.current.getScreenshot();
+    // Handle captured image (e.g., save it)
+    console.log(imageSrc);
+    // Close scan popup
+    setShowScanPopup(false);
   };
 
   return (
     <div className="App">
+      <div className="toolbar">
+        <button onClick={() => console.log("Information clicked")}>Information</button>
+        <button onClick={() => console.log("Check your Savings clicked")}>Check your Savings</button>
+        <button onClick={() => console.log("Recipes clicked")}>Recipes</button>
+      </div>
       <header>Your Fridge</header>
       <InventoryList inventory={inventory} />
       <div className="actions">
         <button onClick={toggleAddPopup}>Add</button>
-        <button onClick={handleScanItem}>Scan</button>
+        <button onClick={toggleScanPopup}>Scan</button>
 
         {/* Add Popup */}
         {showAddPopup && (
-          <div className="popup">
+          <div className="popup large-popup">
             <h2>Add New Item</h2>
-            <label>Name:</label>
-            <input type="text" name="name" value={newItem.name} onChange={handleInputChange} />
-            <label>Amount:</label>
-            <input type="number" name="amount" value={newItem.amount} onChange={handleInputChange} />
-            <label>Spent:</label>
-            <input type="text" name="spent" value={newItem.spent} onChange={handleInputChange} />
-            <label>Expiry Date:</label>
-            <input type="text" name="expiryDate" value={newItem.expiryDate} onChange={handleInputChange} />
-            <label>Status:</label>
-            <input type="text" name="status" value={newItem.status} onChange={handleInputChange} />
-            <button onClick={handleAddItem}>Save</button>
-            <button onClick={toggleAddPopup}>Cancel</button>
+            <div className="form-group">
+              <label>Name:</label>
+              <input type="text" name="name" value={newItem.name} onChange={handleInputChange} />
+            </div>
+            <div className="form-group">
+              <label>Amount:</label>
+              <input type="number" name="amount" value={newItem.amount} onChange={handleInputChange} />
+            </div>
+            <div className="form-group">
+              <label>Spent:</label>
+              <input type="text" name="spent" value={newItem.spent} onChange={handleInputChange} />
+            </div>
+            <div className="form-group">
+              <label>Expiry Date:</label>
+              <input type="text" name="expiryDate" value={newItem.expiryDate} onChange={handleInputChange} />
+            </div>
+            <div className="form-group">
+              <label>Status:</label>
+              <input type="text" name="status" value={newItem.status} onChange={handleInputChange} />
+            </div>
+            <div className="form-actions">
+              <button onClick={handleAddItem}>Save</button>
+              <button onClick={toggleAddPopup}>Cancel</button>
+            </div>
           </div>
         )}
 
@@ -83,14 +105,13 @@ function App() {
         {showScanPopup && (
           <div className="popup">
             <h2>Scan Item</h2>
+            {/* Camera component */}
             <Webcam
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
-              width={320}
-              height={240}
             />
-            <button onClick={toggleScanPopup}>Save</button>
+            <button onClick={handleScanItem}>Save</button>
             <button onClick={toggleScanPopup}>Cancel</button>
           </div>
         )}
