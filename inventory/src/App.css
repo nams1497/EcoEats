@@ -1,15 +1,15 @@
 /* Updated App.css */
 
-body, html {
+/* body, html {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
-  background-image: url('./images/fridge.jpg'); 
+  background-image: url('./images/homepage.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-}
+} */
 
 .App {
   max-width: 1200px;
@@ -135,4 +135,29 @@ button:hover {
 
 .popup.open {
   transform: translate(-50%, -50%) scale(1.05);
+}
+
+
+/* Add styles for the navbar and page banner */
+
+.navigation {
+  background-color: navy;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  /* ... other styles ... */
+}
+
+.homepage-banner {
+  background-image: url('./images/homepage.png'); /* Make sure this path is correct */
+  height: 300px; /* Adjust as needed */
+  background-size: cover;
+  background-position: center;
+}
+
+
+/* Ensure your inventory list is styled and appears below the banner */
+.inventory-list {
+  margin-top: 20px; /* Adjust as necessary */
 }
