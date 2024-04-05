@@ -1,5 +1,3 @@
-// Updated App.js
-
 import React, { useState } from 'react';
 import Webcam from 'react-webcam';
 import InventoryList from './components/InventoryList';
@@ -67,8 +65,12 @@ function App() {
       <header>Your Fridge</header>
       <InventoryList inventory={inventory} />
       <div className="actions">
-        <button onClick={toggleAddPopup}>Add</button>
-        <button onClick={toggleScanPopup}>Scan</button>
+        <button className="add-button" onClick={toggleAddPopup}>Add Manually</button>
+        <div className="scan-buttons">
+          <button onClick={toggleScanPopup}>Scan Receipt</button>
+          <button onClick={toggleScanPopup}>Scan Package</button>
+          <button onClick={toggleScanPopup}>Scan Fresh Produce</button>
+        </div>
 
         {/* Add Popup */}
         {showAddPopup && (

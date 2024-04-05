@@ -1,8 +1,3 @@
-.actions {
-  text-align: center;
-  margin-top: 20px; /* Add margin to push the buttons down */
-}
-
 /* Updated App.css */
 
 body, html {
@@ -20,10 +15,9 @@ body, html {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.85); /* Adjust alpha value to make it more opaque */
+  background-color: rgba(255, 255, 255, 0.9); /* Adjust alpha value to make it more opaque */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
 
 .toolbar {
   background-color: navy;
@@ -53,12 +47,16 @@ header {
   padding: 20px 0;
   text-align: center;
   border-bottom: 1px solid #ddd;
+  margin-top: 40px;
+  font-weight: bold; /* Add this line to make the text bold */
 }
+
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 th, td {
@@ -124,9 +122,9 @@ tr:hover {
 .add-button,
 .scan-buttons button {
   margin: 8px;
-  padding: 10px 20px;
-  background-color: #FFFFCC;
-  color: black;
+  padding: 5px 10px;
+  background-color: #666666;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
