@@ -58,9 +58,11 @@ function App() {
   return (
     <div className="App">
       <div className="toolbar">
-        <button onClick={() => console.log("Information clicked")}>Information</button>
         <button onClick={() => console.log("Check your Savings clicked")}>Check your Savings</button>
         <button onClick={() => console.log("Recipes clicked")}>Recipes</button>
+        <button onClick={() => console.log("Information clicked")}>Information</button>
+        <button onClick={() => console.log("Recycling Agencies Clicked")}>Recycling Agencies</button>
+        <button onClick={() => console.log("Check My Knowledge Clicked")}>Check My Knowledge</button>
       </div>
       <header>Your Fridge</header>
       <InventoryList inventory={inventory} />
