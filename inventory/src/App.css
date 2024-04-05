@@ -1,3 +1,8 @@
+.actions {
+  text-align: center;
+  margin-top: 20px; /* Add margin to push the buttons down */
+}
+
 /* Updated App.css */
 
 body, html {
@@ -5,19 +10,20 @@ body, html {
   padding: 0;
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
-  background-image: url('C:/Users/nams1/OneDrive/Documents/Academic/SEM-4/EcoEats_githubConnected/EcoEats/inventory/public/Foods.jpeg');
+  background-image: url('../public/back.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center 25%; /* Adjust background position to start from 1/4 of the page */
 }
 
 .App {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85); /* Adjust alpha value to make it more opaque */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 
 .toolbar {
   background-color: navy;
@@ -79,6 +85,7 @@ tr:hover {
 
 .actions {
   text-align: center;
+  margin-top: 20px; /* Add margin to push the buttons down */
 }
 
 .popup {
@@ -106,4 +113,28 @@ tr:hover {
   border-radius: 4px;
 }
 
-/* Add more styling as needed */
+/* Button styling */
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.add-button,
+.scan-buttons button {
+  margin: 8px;
+  padding: 10px 20px;
+  background-color: #FFFFCC;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold; /* Add this line to make the text bolder */
+}
+
+.add-button:hover,
+.scan-buttons button:hover {
+  background-color: #0056b3;
+}
