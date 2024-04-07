@@ -2,10 +2,7 @@ from flask import Flask,request, redirect, url_for,jsonify
 import os
 import cv2
 from ocr_core import ocr_core
-<<<<<<< Updated upstream
 from ocr_core2 import expiry
-=======
->>>>>>> Stashed changes
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 from keras.models import Model, load_model
@@ -108,7 +105,6 @@ def serve1():
         if file and allowed_file(file.filename):
 
             # call the OCR function on it
-<<<<<<< Updated upstream
             extracted_text1 = ocr_core(file)
             name=str(extracted_text1[0]['name'])
             extracted_text = str(extracted_text1[0]['amount'])
@@ -116,12 +112,6 @@ def serve1():
 
             # extract the text and display it
             return jsonify({"msg": msg, "extracted_text": extracted_text,"name": name})
-=======
-            extracted_text = ocr_core(file)
-
-            # extract the text and display it
-            return jsonify({"msg": "Successfully processed", "extracted_text": extracted_text})
->>>>>>> Stashed changes
             #return redirect(url_for('index', msg='Successfully processed', extracted_text=extracted_text, img_src=url_for('static', filename=file.filename)))
     elif request.method == 'GET':
         return send_from_directory(app.static_folder, 'index.html')
@@ -138,17 +128,11 @@ def serve2():
             return send_from_directory(app.static_folder, 'index.html')
 
         if file and allowed_file(file.filename):
-<<<<<<< Updated upstream
             basepath = os.path.dirname(__file__)
             file_path = os.path.join(basepath, 'uploads', secure_filename(file.filename))
             file.save(file_path)
             # call the OCR function on it
             extracted_text = expiry(file_path)
-=======
-
-            # call the OCR function on it
-            extracted_text = ocr_core(file)
->>>>>>> Stashed changes
 
             # extract the text and display it
             return jsonify({"msg2": "Successfully processed", "extracted_text2": extracted_text})
@@ -176,15 +160,9 @@ def serve():
             image = load_single_image(file_path)
             extracted_text1 = format(float(new_model.predict(image.reshape(1,100,100,3))[0][0]), '.20f')
             extracted_text2 = output(file_path)
-<<<<<<< Updated upstream
             extracted_text = str(int((1 - float(extracted_text1)) * float(extracted_text2[1])))
             # extract the text and display it
             return jsonify({"msg1": extracted_text, "extracted_text1": extracted_text2[0]})
-=======
-            extracted_text = extracted_text2[0] + ', ' + str(int((1 - float(extracted_text1)) * float(extracted_text2[1])))
-            # extract the text and display it
-            return jsonify({"msg1": "Successfully processed", "extracted_text1": extracted_text})
->>>>>>> Stashed changes
     elif request.method == 'GET':
         return send_from_directory(app.static_folder, 'index.html')  
 
