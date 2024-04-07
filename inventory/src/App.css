@@ -111,6 +111,14 @@ tr:hover {
   border-radius: 4px;
 }
 
+.popup .scan-options {
+  margin-top: 20px; /* Add spacing between scan options and buttons */
+}
+
+.popup button {
+  margin-top: 10px; /* Add spacing between buttons */
+}
+
 /* Button styling */
 .actions {
   display: flex;

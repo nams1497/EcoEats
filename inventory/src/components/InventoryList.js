@@ -1,99 +1,41 @@
-// InventoryList.js
+// components/InventoryList.js
 import React from 'react';
-import InventoryItem from './InventoryItem';
 
-function InventoryList({ inventory }) {
+const InventoryList = ({ inventory, onEdit, onDelete }) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Amount</th>
-          <th>Spent</th>
-          <th>Expiry Date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {inventory.map(item => (
-          <InventoryItem key={item.id} item={item} />
-        ))}
-      </tbody>
-    </table>
+    <div className="inventory-list">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Spent</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inventory.map(item => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>{item.amount}</td>
+              <td>{item.spent}</td>
+              <td>{item.expiryDate}</td>
+              <td>{item.status}</td>
+              <td>
+                <button onClick={() => onEdit(item.id, item)}>Edit</button>
+              </td>
+              <td>
+                <button onClick={() => onDelete(item.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
-}
+};
 
 export default InventoryList;
-
-
-
-
-// // InventoryList.js
-// import React from 'react';
-// import InventoryItem from './InventoryItem';
-// // InventoryList.js
-
-// // If you want to use a default export, it should look like this:
-// export default function InventoryList({ inventory }) {
-//   // ...
-// }
-
-// Then, when you import it in App.js, it should look like this:
-// import InventoryList from './components/InventoryList';
-
-
-
-// // InventoryList.js or wherever your table is defined
-// function InventoryList({ inventory }) {
-//   return (
-//     <table>
-//       <thead>
-//         <tr>
-//           <th style={{width: '20%'}}>Name</th>
-//           <th style={{width: '20%'}}>Amount</th>
-//           <th style={{width: '20%'}}>Cost</th>
-//           <th style={{width: '20%'}}>Expiry Date</th>
-//           <th style={{width: '20%'}}>Actions</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         {inventory.map(item => (
-//           <InventoryItem key={item.id} item={item} />
-//         ))}
-//       </tbody>
-//     </table>
-//   );
-// }
-
-
-
-
-// // InventoryList.js
-// import React from 'react';
-// import InventoryItem from './InventoryItem';
-
-// function InventoryList({ inventory, onDelete }) { // Note the addition of the onDelete prop here
-//   return (
-//     <table>
-//       <thead>
-//         <tr>
-//           <th>Name</th>
-//           <th>Amount</th>
-//           <th>Spent</th>
-//           <th>Expiry Date</th>
-//           <th>Status</th>
-//           <th>Action</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         {inventory.map(item => (
-//           <InventoryItem key={item.id} item={item} onDelete={onDelete} />
-//         ))}
-//       </tbody>
-//     </table>
-//   );
-// }
-
-// export default InventoryList;
-
-

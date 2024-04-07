@@ -31,6 +31,25 @@ function App() {
   const [extractedText1, setExtractedText1] = useState('');
   const webcamRef = useRef(null);
 
+  // Define handleEditItem function
+  const handleEditItem = (id, updatedItem) => {
+    // Find the item in the inventory array and update it
+    const updatedInventory = inventory.map(item => {
+      if (item.id === id) {
+        return updatedItem;
+      }
+      return item;
+    });
+    setInventory(updatedInventory);
+  };
+
+  // Define handleDeleteItem function
+  const handleDeleteItem = (id) => {
+    // Filter out the item with the specified id from the inventory array
+    const updatedInventory = inventory.filter(item => item.id !== id);
+    setInventory(updatedInventory);
+  };
+
   useEffect(() => {
     const storedInventory = localStorage.getItem('inventory');
     if (storedInventory) {
@@ -78,6 +97,18 @@ function App() {
       status: ''
     });
     setShowAddPopup(false);
+  };
+
+  const populateItems = (name, amount, spent, expiryDate, status) => {
+    const newInventoryItem = {
+      id: inventory.length + 1,
+      name: name,
+      amount: amount,
+      spent: spent,
+      expiryDate: expiryDate,
+      status: status
+    };
+    setInventory([...inventory, newInventoryItem]);
   };
 
   const handleFileChange = (e) => {
@@ -140,7 +171,11 @@ function App() {
         <button onClick={() => console.log("Check My Knowledge Clicked")}>Check My Knowledge</button>
       </div>
       <header>Your Fridge</header>
-      <InventoryList inventory={inventory} />
+      <InventoryList
+        inventory={inventory}
+        onEdit={handleEditItem}
+        onDelete={handleDeleteItem}
+      />
       <div className="actions">
         <button className="add-button" onClick={() => togglePopup('add')}>Add Manually</button>
         <div className="scan-buttons">
@@ -231,7 +266,7 @@ function App() {
               )}
             </div>
             <button onClick={() => togglePopup('receipt')}>Cancel</button>
-            <button onClick={handleUpload2}>Upload</button>
+            <button onClick={() => populateItems('Banana', '1', '2$', '10 April 2024', 'Not Expired')}>Upload</button>
           </div>
         )}
 
