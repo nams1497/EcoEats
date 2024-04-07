@@ -12,8 +12,8 @@ import numpy as np
 
 
 UPLOAD_FOLDER = '/static/uploads/'
-new_model=load_model('rottenvsfresh.h5')
-classimodel = load_model('FruitModel.h5')
+#new_model=load_model('rottenvsfresh.h5')
+#classimodel = load_model('FruitModel.h5')
 labels ={0: ['apple', 60],
  1: ['banana',7],
  2: ['beetroot', 10],
