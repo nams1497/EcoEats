@@ -136,6 +136,7 @@ function App() {
       setName(data.name);
       setImgSrc(data.imgSrc);
       setExtractedText(data.extracted_text);
+<<<<<<< Updated upstream
       setMsg(data.msg);
       setNewItem(prevItem => ({
         ...prevItem,
@@ -148,6 +149,17 @@ function App() {
       if (extractedText !== '' || msg !== '') {
         populateItems(data.name, data.extracted_text,  data.msg,'', '');
       }
+=======
+      setMsg('Image uploaded successfully!');
+      setNewItem(prevItem => ({
+        ...prevItem,
+        name: 'ttt',
+        amount: 2,
+        spent: '3',
+        expiryDate: '4',
+        status: 'new'
+      }));
+>>>>>>> Stashed changes
     } catch (error) {
       console.error('Error uploading image:', error);
       setMsg('Failed to upload image');
@@ -207,6 +219,7 @@ function App() {
       setMsg2('Image uploaded successfully!');
       setNewItem(prevItem => ({
         ...prevItem,
+<<<<<<< Updated upstream
         name: '',
         amount: '',
         spent: '',
@@ -216,12 +229,24 @@ function App() {
       if (extractedText2 !== '' || msg2 !== '') {
         populateItems('', '',  '',data.extracted_text2, '');
       }
+=======
+        name: 'ttt',
+        amount: 2,
+        spent: '3',
+        expiryDate: '4',
+        status: 'new'
+      }));
+>>>>>>> Stashed changes
     } catch (error) {
       console.error('Error uploading image:', error);
       setMsg('Failed to upload image');
     }
   };
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   return (
     <div className="App">
       <div className="toolbar">
@@ -316,9 +341,21 @@ function App() {
             <div className="scan-options">
               <form onSubmit={handleUpload} encType="multipart/form-data">
                 <input type="file" name="file" onChange={handleFileChange} />
+<<<<<<< Updated upstream
                 <input type="submit" value="Upload" />
               </form>
               {imgSrc && <img src={imgSrc} alt="Uploaded" />}
+=======
+              </form>
+              {imgSrc && <img src={imgSrc} alt="Uploaded" />}
+              {extractedText ? (
+                <p>
+                  <b>{extractedText}</b>
+                </p>
+              ) : (
+                <p></p>
+              )}
+>>>>>>> Stashed changes
             </div>
             <button onClick={() => togglePopup('receipt')}>Cancel</button>
           </div>
@@ -331,11 +368,26 @@ function App() {
             <div className="scan-options">
               <form onSubmit={handleUpload3} encType="multipart/form-data">
                 <input type="file" name="file2" onChange={handleFileChange2} />
+<<<<<<< Updated upstream
                 <input type="submit" value="Upload" />
               </form>
               {imgSrc2 && <img src={imgSrc2} alt="Uploaded" />}
             </div>
             <button onClick={() => togglePopup('package')}>Cancel</button>
+=======
+              </form>
+              {imgSrc2 && <img src={imgSrc2} alt="Uploaded" />}
+              {extractedText2 ? (
+                <p>
+                  <b>{extractedText2}</b>
+                </p>
+              ) : (
+                <p></p>
+              )}
+            </div>
+            <button onClick={() => togglePopup('package')}>Cancel</button>
+            <button onClick={handleUpload3}>Upload</button>
+>>>>>>> Stashed changes
           </div>
         )}
 
