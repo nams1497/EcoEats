@@ -1,5 +1,6 @@
 
 
+
 blinker==1.7.0
 click==8.1.7
 Flask==3.0.2
@@ -13,5 +14,4 @@ Werkzeug==3.0.2
 zipp==3.18.1
 opencv-python-headless==4.5.5.62
 Pillow==8.4.0
-
-
+pytesseract==0.3.8
