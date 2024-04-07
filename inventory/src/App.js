@@ -1,5 +1,4 @@
-import React, { useState,useEffect } from 'react';
-import Webcam from 'react-webcam';
+import React, { useState, useEffect, useRef } from 'react';
 import InventoryList from './components/InventoryList';
 import './App.css';
 
@@ -12,7 +11,9 @@ function App() {
     ];
   });
   const [showAddPopup, setShowAddPopup] = useState(false);
-  const [showScanPopup, setShowScanPopup] = useState(false);
+  const [showScanReceiptPopup, setShowScanReceiptPopup] = useState(false);
+  const [showScanProducePopup, setShowScanProducePopup] = useState(false);
+  const [showScanPackagePopup, setShowScanPackagePopup] = useState(false);
   const [newItem, setNewItem] = useState({
     name: '',
     amount: 0,
@@ -20,45 +21,45 @@ function App() {
     expiryDate: '',
     status: ''
   });
+  const [msg, setMsg] = useState('');
+  const [file, setFile] = useState(null);
+  const [imgSrc, setImgSrc] = useState('');
+  const [extractedText, setExtractedText] = useState('');
+  const [msg1, setMsg1] = useState('');
+  const [file1, setFile1] = useState(null);
+  const [imgSrc1, setImgSrc1] = useState('');
+  const [extractedText1, setExtractedText1] = useState('');
+  const webcamRef = useRef(null);
 
   useEffect(() => {
-    // Load inventory from local storage when component mounts
     const storedInventory = localStorage.getItem('inventory');
     if (storedInventory) {
       setInventory(JSON.parse(storedInventory));
     }
   }, []);
 
-  fetch('/api/data', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response data
-    console.log(data);
-  })
-  .catch(error => {
-    // Handle any errors
-    console.error('Error:', error);
-  });
-
   useEffect(() => {
-    // Save inventory to local storage whenever it changes
     localStorage.setItem('inventory', JSON.stringify(inventory));
     console.log("Inventory saved to local storage:", inventory);
   }, [inventory]);
 
-  const webcamRef = React.useRef(null);
-
-  const toggleAddPopup = () => {
-    setShowAddPopup(!showAddPopup);
-  };
-
-  const toggleScanPopup = () => {
-    setShowScanPopup(!showScanPopup);
+  const togglePopup = (popupType) => {
+    switch (popupType) {
+      case 'add':
+        setShowAddPopup(!showAddPopup);
+        break;
+      case 'receipt':
+        setShowScanReceiptPopup(!showScanReceiptPopup);
+        break;
+      case 'produce':
+        setShowScanProducePopup(!showScanProducePopup);
+        break;
+      case 'package':
+        setShowScanPackagePopup(!showScanPackagePopup);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleInputChange = (event) => {
@@ -68,7 +69,7 @@ function App() {
 
   const handleAddItem = () => {
     const newInventoryItem = { id: inventory.length + 1, ...newItem };
-    setInventory([...inventory, { id: inventory.length + 1, ...newItem }]);
+    setInventory([...inventory, newInventoryItem]);
     setNewItem({
       name: '',
       amount: 0,
@@ -78,25 +79,6 @@ function App() {
     });
     setShowAddPopup(false);
   };
-
-  const handleScanItem = () => {
-    // Capture picture from webcam
-    const imageSrc = webcamRef.current.getScreenshot();
-    // Handle captured image (e.g., save it)
-    console.log(imageSrc);
-    // Close scan popup
-    setShowScanPopup(false);
-  };
-  
-  const [msg, setMsg] = useState('');
-  const [file, setFile] = useState(null);
-  const [imgSrc, setImgSrc] = useState('');
-  const [extractedText, setExtractedText] = useState('');
-
-  const [msg1, setMsg1] = useState('');
-  const [file1, setFile1] = useState(null);
-  const [imgSrc1, setImgSrc1] = useState('');
-  const [extractedText1, setExtractedText1] = useState('');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -122,7 +104,7 @@ function App() {
       setMsg('Failed to upload image');
     }
   };
-  
+
   const handleFileChange1 = (e) => {
     setFile1(e.target.files[0]);
   };
@@ -131,7 +113,7 @@ function App() {
     e.preventDefault();
     const formData = new FormData();
     formData.append('file1', file1);
-
+    setShowScanReceiptPopup(false); // Close the popup
     try {
       const response = await fetch('/pred', {
         method: 'POST',
@@ -148,7 +130,6 @@ function App() {
     }
   };
 
-
   return (
     <div className="App">
       <div className="toolbar">
@@ -161,48 +142,46 @@ function App() {
       <header>Your Fridge</header>
       <InventoryList inventory={inventory} />
       <div className="actions">
-        <button className="add-button" onClick={toggleAddPopup}>Add Manually</button>
+        <button className="add-button" onClick={() => togglePopup('add')}>Add Manually</button>
         <div className="scan-buttons">
-          <button onClick={toggleScanPopup}>Scan Receipt</button>
-          <button onClick={toggleScanPopup}>Scan Package</button>
-          <button onClick={toggleScanPopup}>Scan Fresh Produce</button>
+          <button onClick={() => togglePopup('receipt')}>Scan Receipt</button>
+          <button onClick={() => togglePopup('package')}>Scan Package</button>
+          <button onClick={() => togglePopup('produce')}>Scan Fresh Produce</button>
         </div>
-
         <div>
-      {msg && <h1></h1>}
-      <form onSubmit={handleUpload} encType="multipart/form-data">
-        <p>
-          <input type="file" name="file" onChange={handleFileChange} />
-          <input type="submit" value="Upload" />
-        </p>
-      </form>
-      {imgSrc && <img src={imgSrc} alt="Uploaded" />}
-      {extractedText ? (
-        <p>
-          <b>{extractedText}</b>
-        </p>
-      ) : (
-        <p></p>
-      )}
-    </div>
-    <div>
-      {/* {msg1 && <h1>{msg1}</h1>} */}
-      <form onSubmit={handleUpload2} encType="multipart/form-data">
-        <p>
-          <input type="file" name="file1" onChange={handleFileChange1} />
-          <input type="submit" value="Upload" />
-        </p>
-      </form>
-      {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-      {extractedText1 ? (
-        <p>
-          <b>{extractedText1}</b>
-        </p>
-      ) : (
-        <p></p>
-      )}
-    </div>
-
+          {msg && <h1></h1>}
+          <form onSubmit={handleUpload} encType="multipart/form-data">
+            <p>
+              <input type="file" name="file" onChange={handleFileChange} />
+              <input type="submit" value="Upload" />
+            </p>
+          </form>
+          {imgSrc && <img src={imgSrc} alt="Uploaded" />}
+          {extractedText ? (
+            <p>
+              <b>{extractedText}</b>
+            </p>
+          ) : (
+            <p></p>
+          )}
+        </div>
+        <div>
+          {/* {msg1 && <h1>{msg1}</h1>} */}
+          <form onSubmit={handleUpload2} encType="multipart/form-data">
+            <p>
+              <input type="file" name="file1" onChange={handleFileChange1} />
+              <input type="submit" value="Upload" />
+            </p>
+          </form>
+          {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+          {extractedText1 ? (
+            <p>
+              <b>{extractedText1}</b>
+            </p>
+          ) : (
+            <p></p>
+          )}
+        </div>
         {/* Add Popup */}
         {showAddPopup && (
           <div className="popup large-popup">
@@ -229,44 +208,76 @@ function App() {
             </div>
             <div className="form-actions">
               <button onClick={handleAddItem}>Save</button>
-              <button onClick={toggleAddPopup}>Cancel</button>
+              <button onClick={() => togglePopup('add')}>Cancel</button>
             </div>
           </div>
         )}
 
-        {/* Scan Popup */}
-        {showScanPopup && (
+        {/* Scan Receipt Popup */}
+        {showScanReceiptPopup && (
           <div className="popup">
-            <h2>Scan Item</h2>
-            {/* Camera component */}
-            {/* <Webcam */}
-              {/* audio={false} */}
-              {/* ref={webcamRef} */}
-              {/* screenshotFormat="image/jpeg" */}
-            {/* /> */}
-          <div className="scan-options">
-          <form onSubmit={handleUpload2} encType="multipart/form-data">
-        <p>
-          <input type="file" name="file1" onChange={handleFileChange1} />
-          <input type="submit" value="Upload" />
-        </p>
-      </form>
-      {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-      {extractedText1 ? (
-        <p>
-          <b>{extractedText1}</b>
-        </p>
-      ) : (
-        <p></p>
-      )}
-            {/* <button onClick={handleUpload}>Upload</button> */}
-            {/* <button onClick={handleScanItem}>Click Photo</button> */}
-          </div>
-          <button onClick={toggleScanPopup}>Cancel</button>
+            <h2>Scan Receipt</h2>
+            <div className="scan-options">
+              <form onSubmit={handleUpload2} encType="multipart/form-data">
+                <input type="file" name="file1" onChange={handleFileChange1} />
+              </form>
+              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+              {extractedText1 ? (
+                <p>
+                  <b>{extractedText1}</b>
+                </p>
+              ) : (
+                <p></p>
+              )}
+            </div>
+            <button onClick={() => togglePopup('receipt')}>Cancel</button>
+            <button onClick={handleUpload2}>Upload</button>
           </div>
         )}
 
-        {/* Other components like buttons for import/export here */}
+        {/* Scan Package Popup */}
+        {showScanPackagePopup && (
+          <div className="popup">
+            <h2>Scan Package</h2>
+            <div className="scan-options">
+              <form onSubmit={handleUpload2} encType="multipart/form-data">
+                <input type="file" name="file1" onChange={handleFileChange1} />
+              </form>
+              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+              {extractedText1 ? (
+                <p>
+                  <b>{extractedText1}</b>
+                </p>
+              ) : (
+                <p></p>
+              )}
+            </div>
+            <button onClick={() => togglePopup('package')}>Cancel</button>
+            <button onClick={handleUpload2}>Upload</button>
+          </div>
+        )}
+
+        {/* Scan Fresh Produce Popup */}
+        {showScanProducePopup && (
+          <div className="popup">
+            <h2>Scan Produce</h2>
+            <div className="scan-options">
+              <form onSubmit={handleUpload2} encType="multipart/form-data">
+                <input type="file" name="file1" onChange={handleFileChange1} />
+              </form>
+              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+              {extractedText1 ? (
+                <p>
+                  <b>{extractedText1}</b>
+                </p>
+              ) : (
+                <p></p>
+              )}
+            </div>
+            <button onClick={() => togglePopup('produce')}>Cancel</button>
+            <button onClick={handleUpload2}>Upload</button>
+          </div>
+        )}
       </div>
     </div>
   );
