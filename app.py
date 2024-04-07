@@ -104,10 +104,13 @@ def serve1():
         if file and allowed_file(file.filename):
 
             # call the OCR function on it
-            extracted_text = ocr_core(file)
+            extracted_text1 = ocr_core(file)
+            name=str(extracted_text1[0]['name'])
+            extracted_text = str(extracted_text1[0]['amount'])
+            msg=str(extracted_text1[0]['spent'])
 
             # extract the text and display it
-            return jsonify({"msg": "Successfully processed", "extracted_text": extracted_text})
+            return jsonify({"msg": msg, "extracted_text": extracted_text,"name": name})
             #return redirect(url_for('index', msg='Successfully processed', extracted_text=extracted_text, img_src=url_for('static', filename=file.filename)))
     elif request.method == 'GET':
         return send_from_directory(app.static_folder, 'index.html')

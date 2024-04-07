@@ -23,6 +23,7 @@ function App() {
     status: ''
   });
   const [msg, setMsg] = useState('');
+  const [name, setName] = useState('');
   const [file, setFile] = useState(null);
   const [imgSrc, setImgSrc] = useState('');
   const [extractedText, setExtractedText] = useState('');
@@ -132,9 +133,13 @@ function App() {
       });
       const data = await response.json();
       console.log(data);
+      setName(data.name);
       setImgSrc(data.imgSrc);
       setExtractedText(data.extracted_text);
-      setMsg('Image uploaded successfully!');
+      setMsg(data.msg);
+      if (extractedText !== '' || msg !== '') {
+        populateItems(data.name, data.extracted_text,  data.msg,'', '');
+      }
     } catch (error) {
       console.error('Error uploading image:', error);
       setMsg('Failed to upload image');
@@ -160,7 +165,9 @@ function App() {
       setImgSrc1(data.imgSrc1);
       setExtractedText1(data.extracted_text1);
       setMsg1(data.msg1);
-      populateItems(extractedText1, '', '', msg1, '');
+      if (extractedText1 !== '' || msg1 !== '') {
+        populateItems(data.extracted_text1, '', '', data.msg1, '');
+      }
     } catch (error) {
       console.error('Error uploading image:', error);
       setMsg1('Failed to upload image');
@@ -293,19 +300,12 @@ function App() {
             <h2>Scan Receipt</h2>
             <div className="scan-options">
               <form onSubmit={handleUpload} encType="multipart/form-data">
-                <input type="file" name="file1" onChange={handleFileChange} />
+                <input type="file" name="file" onChange={handleFileChange} />
+                <input type="submit" value="Upload" />
               </form>
               {imgSrc && <img src={imgSrc} alt="Uploaded" />}
-              {extractedText ? (
-                <p>
-                  <b>{extractedText}</b>
-                </p>
-              ) : (
-                <p></p>
-              )}
             </div>
             <button onClick={() => togglePopup('receipt')}>Cancel</button>
-            <button onClick={() => populateItems('Banana', '1', '2$', '10 April 2024', 'Not Expired')}>Upload</button>
           </div>
         )}
 
@@ -318,13 +318,6 @@ function App() {
                 <input type="file" name="file2" onChange={handleFileChange2} />
               </form>
               {imgSrc2 && <img src={imgSrc2} alt="Uploaded" />}
-              {extractedText2 ? (
-                <p>
-                  <b>{extractedText2}</b>
-                </p>
-              ) : (
-                <p></p>
-              )}
             </div>
             <button onClick={() => togglePopup('package')}>Cancel</button>
             <button onClick={handleUpload3}>Upload</button>
