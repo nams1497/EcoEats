@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Webcam from 'react-webcam';
 import InventoryList from './components/InventoryList';
 import './App.css';
 
 function App() {
-  const [inventory, setInventory] = useState([
-    { id: 1, name: 'Apple', amount: 2, spent: '$2', expiryDate: '15 Apr 2024', status: 'Not Expired' },
-    // Add other initial items here
-  ]);
-
+  const [inventory, setInventory] = useState(() => {
+    const storedInventory = localStorage.getItem('inventory');
+    return storedInventory ? JSON.parse(storedInventory) : [
+      { id: 1, name: 'Apple', amount: 2, spent: '$2', expiryDate: '15 Apr 2024', status: 'Not Expired' },
+      // Add other initial items here
+    ];
+  });
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showScanPopup, setShowScanPopup] = useState(false);
   const [newItem, setNewItem] = useState({
@@ -18,6 +20,36 @@ function App() {
     expiryDate: '',
     status: ''
   });
+
+  useEffect(() => {
+    // Load inventory from local storage when component mounts
+    const storedInventory = localStorage.getItem('inventory');
+    if (storedInventory) {
+      setInventory(JSON.parse(storedInventory));
+    }
+  }, []);
+
+  fetch('/api/data', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the response data
+    console.log(data);
+  })
+  .catch(error => {
+    // Handle any errors
+    console.error('Error:', error);
+  });
+
+  useEffect(() => {
+    // Save inventory to local storage whenever it changes
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    console.log("Inventory saved to local storage:", inventory);
+  }, [inventory]);
 
   const webcamRef = React.useRef(null);
 
@@ -35,6 +67,7 @@ function App() {
   };
 
   const handleAddItem = () => {
+    const newInventoryItem = { id: inventory.length + 1, ...newItem };
     setInventory([...inventory, { id: inventory.length + 1, ...newItem }]);
     setNewItem({
       name: '',
@@ -54,6 +87,67 @@ function App() {
     // Close scan popup
     setShowScanPopup(false);
   };
+  
+  const [msg, setMsg] = useState('');
+  const [file, setFile] = useState(null);
+  const [imgSrc, setImgSrc] = useState('');
+  const [extractedText, setExtractedText] = useState('');
+
+  const [msg1, setMsg1] = useState('');
+  const [file1, setFile1] = useState(null);
+  const [imgSrc1, setImgSrc1] = useState('');
+  const [extractedText1, setExtractedText1] = useState('');
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      console.log(data);
+      setImgSrc(data.imgSrc);
+      setExtractedText(data.extracted_text);
+      setMsg('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setMsg('Failed to upload image');
+    }
+  };
+  
+  const handleFileChange1 = (e) => {
+    setFile1(e.target.files[0]);
+  };
+
+  const handleUpload2 = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('file1', file1);
+
+    try {
+      const response = await fetch('/pred', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      console.log(data);
+      setImgSrc1(data.imgSrc1);
+      setExtractedText1(data.extracted_text1);
+      setMsg1('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setMsg1('Failed to upload image');
+    }
+  };
+
 
   return (
     <div className="App">
@@ -73,6 +167,41 @@ function App() {
           <button onClick={toggleScanPopup}>Scan Package</button>
           <button onClick={toggleScanPopup}>Scan Fresh Produce</button>
         </div>
+
+        <div>
+      {msg && <h1></h1>}
+      <form onSubmit={handleUpload} encType="multipart/form-data">
+        <p>
+          <input type="file" name="file" onChange={handleFileChange} />
+          <input type="submit" value="Upload" />
+        </p>
+      </form>
+      {imgSrc && <img src={imgSrc} alt="Uploaded" />}
+      {extractedText ? (
+        <p>
+          <b>{extractedText}</b>
+        </p>
+      ) : (
+        <p></p>
+      )}
+    </div>
+    <div>
+      {/* {msg1 && <h1>{msg1}</h1>} */}
+      <form onSubmit={handleUpload2} encType="multipart/form-data">
+        <p>
+          <input type="file" name="file1" onChange={handleFileChange1} />
+          <input type="submit" value="Upload" />
+        </p>
+      </form>
+      {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+      {extractedText1 ? (
+        <p>
+          <b>{extractedText1}</b>
+        </p>
+      ) : (
+        <p></p>
+      )}
+    </div>
 
         {/* Add Popup */}
         {showAddPopup && (
@@ -110,13 +239,30 @@ function App() {
           <div className="popup">
             <h2>Scan Item</h2>
             {/* Camera component */}
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-            />
-            <button onClick={handleScanItem}>Save</button>
-            <button onClick={toggleScanPopup}>Cancel</button>
+            {/* <Webcam */}
+              {/* audio={false} */}
+              {/* ref={webcamRef} */}
+              {/* screenshotFormat="image/jpeg" */}
+            {/* /> */}
+          <div className="scan-options">
+          <form onSubmit={handleUpload2} encType="multipart/form-data">
+        <p>
+          <input type="file" name="file1" onChange={handleFileChange1} />
+          <input type="submit" value="Upload" />
+        </p>
+      </form>
+      {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+      {extractedText1 ? (
+        <p>
+          <b>{extractedText1}</b>
+        </p>
+      ) : (
+        <p></p>
+      )}
+            {/* <button onClick={handleUpload}>Upload</button> */}
+            {/* <button onClick={handleScanItem}>Click Photo</button> */}
+          </div>
+          <button onClick={toggleScanPopup}>Cancel</button>
           </div>
         )}
 
