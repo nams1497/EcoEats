@@ -187,8 +187,8 @@ function App() {
           {msg && <h1></h1>}
           <form onSubmit={handleUpload} encType="multipart/form-data">
             <p>
-              <input type="file" name="file" onChange={handleFileChange} />
-              <input type="submit" value="Upload" />
+              {/* Remove this input */}
+              {/* <input type="file" name="file" onChange={handleFileChange} /> */}
             </p>
           </form>
           {imgSrc && <img src={imgSrc} alt="Uploaded" />}
@@ -201,13 +201,13 @@ function App() {
           )}
         </div>
         <div>
-          {/* {msg1 && <h1>{msg1}</h1>} */}
-          <form onSubmit={handleUpload2} encType="multipart/form-data">
+          {/* Remove this form */}
+          {/* <form onSubmit={handleUpload2} encType="multipart/form-data">
             <p>
               <input type="file" name="file1" onChange={handleFileChange1} />
               <input type="submit" value="Upload" />
             </p>
-          </form>
+          </form> */}
           {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
           {extractedText1 ? (
             <p>
