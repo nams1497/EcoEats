@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import InventoryList from './components/InventoryList';
 import './App.css';
 
+
 function App() {
   const [inventory, setInventory] = useState(() => {
     const storedInventory = localStorage.getItem('inventory');
@@ -29,6 +30,10 @@ function App() {
   const [file1, setFile1] = useState(null);
   const [imgSrc1, setImgSrc1] = useState('');
   const [extractedText1, setExtractedText1] = useState('');
+  const [msg2, setMsg2] = useState('');
+  const [file2, setFile2] = useState(null);
+  const [imgSrc2, setImgSrc2] = useState('');
+  const [extractedText2, setExtractedText2] = useState(''); 
   const webcamRef = useRef(null);
 
   // Define handleEditItem function
@@ -154,10 +159,44 @@ function App() {
       console.log(data);
       setImgSrc1(data.imgSrc1);
       setExtractedText1(data.extracted_text1);
-      setMsg1('Image uploaded successfully!');
+      setMsg1(data.msg1);
+      populateItems(extractedText1, '', '', msg1, '');
     } catch (error) {
       console.error('Error uploading image:', error);
       setMsg1('Failed to upload image');
+    }
+  };
+
+  const handleFileChange2 = (e) => {
+    setFile2(e.target.files[0]);
+  };
+
+  const handleUpload3 = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('file2', file2);
+
+    try {
+      const response = await fetch('/recpt', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      console.log(data);
+      setImgSrc2(data.imgSrc2);
+      setExtractedText2(data.extracted_text2);
+      setMsg2('Image uploaded successfully!');
+      setNewItem(prevItem => ({
+        ...prevItem,
+        name: 'ttt',
+        amount: 2,
+        spent: '3',
+        expiryDate: '4',
+        status: 'new'
+      }));
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setMsg('Failed to upload image');
     }
   };
 
@@ -183,13 +222,13 @@ function App() {
           <button onClick={() => togglePopup('package')}>Scan Package</button>
           <button onClick={() => togglePopup('produce')}>Scan Fresh Produce</button>
         </div>
-        <div>
+        {/* <div>
           {msg && <h1></h1>}
           <form onSubmit={handleUpload} encType="multipart/form-data">
             <p>
               {/* Remove this input */}
               {/* <input type="file" name="file" onChange={handleFileChange} /> */}
-            </p>
+            {/* </p>
           </form>
           {imgSrc && <img src={imgSrc} alt="Uploaded" />}
           {extractedText ? (
@@ -200,7 +239,7 @@ function App() {
             <p></p>
           )}
         </div>
-        <div>
+        <div> */} 
           {/* Remove this form */}
           {/* <form onSubmit={handleUpload2} encType="multipart/form-data">
             <p>
@@ -208,7 +247,7 @@ function App() {
               <input type="submit" value="Upload" />
             </p>
           </form> */}
-          {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+          {/* {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
           {extractedText1 ? (
             <p>
               <b>{extractedText1}</b>
@@ -216,7 +255,7 @@ function App() {
           ) : (
             <p></p>
           )}
-        </div>
+        </div> */}
         {/* Add Popup */}
         {showAddPopup && (
           <div className="popup large-popup">
@@ -253,13 +292,13 @@ function App() {
           <div className="popup">
             <h2>Scan Receipt</h2>
             <div className="scan-options">
-              <form onSubmit={handleUpload2} encType="multipart/form-data">
-                <input type="file" name="file1" onChange={handleFileChange1} />
+              <form onSubmit={handleUpload} encType="multipart/form-data">
+                <input type="file" name="file1" onChange={handleFileChange} />
               </form>
-              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-              {extractedText1 ? (
+              {imgSrc && <img src={imgSrc} alt="Uploaded" />}
+              {extractedText ? (
                 <p>
-                  <b>{extractedText1}</b>
+                  <b>{extractedText}</b>
                 </p>
               ) : (
                 <p></p>
@@ -275,20 +314,20 @@ function App() {
           <div className="popup">
             <h2>Scan Package</h2>
             <div className="scan-options">
-              <form onSubmit={handleUpload2} encType="multipart/form-data">
-                <input type="file" name="file1" onChange={handleFileChange1} />
+              <form onSubmit={handleUpload3} encType="multipart/form-data">
+                <input type="file" name="file2" onChange={handleFileChange2} />
               </form>
-              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-              {extractedText1 ? (
+              {imgSrc2 && <img src={imgSrc2} alt="Uploaded" />}
+              {extractedText2 ? (
                 <p>
-                  <b>{extractedText1}</b>
+                  <b>{extractedText2}</b>
                 </p>
               ) : (
                 <p></p>
               )}
             </div>
             <button onClick={() => togglePopup('package')}>Cancel</button>
-            <button onClick={handleUpload2}>Upload</button>
+            <button onClick={handleUpload3}>Upload</button>
           </div>
         )}
 
@@ -296,9 +335,12 @@ function App() {
         {showScanProducePopup && (
           <div className="popup">
             <h2>Scan Produce</h2>
-            <div className="scan-options">
-              <form onSubmit={handleUpload2} encType="multipart/form-data">
-                <input type="file" name="file1" onChange={handleFileChange1} />
+            {/* <div className="scan-options">
+              <form id="uploadForm" onSubmit={handleUpload2} encType="multipart/form-data">
+              <p>
+              <input type="file" name="file1" onChange={handleFileChange1} />
+              <input type="submit" value="Upload" />
+              </p>
               </form>
               {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
               {extractedText1 ? (
@@ -308,9 +350,21 @@ function App() {
               ) : (
                 <p></p>
               )}
-            </div>
+            </div> */}
+
+            <div className="scan-options">
+              <form id="uploadForm" onSubmit={handleUpload2} encType="multipart/form-data">
+              <input type="file" name="file1" onChange={handleFileChange1} />
+              <input type="submit" value="Upload" />
+              </form>
+              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
+              {/* populateItems(extractedText1, '', '', msg1, ''); */}
+             </div> 
+            {/* <button onClick={() => {
+              document.getElementById("uploadForm").submit();
+              populateItems(extractedText1, '', '', msg1, '');
+              }}>Upload</button> */}
             <button onClick={() => togglePopup('produce')}>Cancel</button>
-            <button onClick={handleUpload2}>Upload</button>
           </div>
         )}
       </div>
