@@ -12,5 +12,6 @@ packaging==24.0
 Werkzeug==3.0.2
 zipp==3.18.1
 opencv-python-headless==4.5.5.62
+Pillow==8.4.0
 
 
