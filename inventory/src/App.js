@@ -137,6 +137,14 @@ function App() {
       setImgSrc(data.imgSrc);
       setExtractedText(data.extracted_text);
       setMsg(data.msg);
+      setNewItem(prevItem => ({
+        ...prevItem,
+        name: data.name,
+        amount: data.extracted_text,
+        spent: data.msg,
+        expiryDate: '',
+        status: ''
+      }));
       if (extractedText !== '' || msg !== '') {
         populateItems(data.name, data.extracted_text,  data.msg,'', '');
       }
@@ -165,8 +173,12 @@ function App() {
       setImgSrc1(data.imgSrc1);
       setExtractedText1(data.extracted_text1);
       setMsg1(data.msg1);
+      const daysToAdd = parseInt(data.msg1, 10);
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + daysToAdd);
+      const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
       if (extractedText1 !== '' || msg1 !== '') {
-        populateItems(data.extracted_text1, '', '', data.msg1, '');
+        populateItems(data.extracted_text1, '', '', formattedDate, '');
       }
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -195,12 +207,15 @@ function App() {
       setMsg2('Image uploaded successfully!');
       setNewItem(prevItem => ({
         ...prevItem,
-        name: 'ttt',
-        amount: 2,
-        spent: '3',
-        expiryDate: '4',
-        status: 'new'
+        name: '',
+        amount: '',
+        spent: '',
+        expiryDate: data.extracted_text2,
+        status: ''
       }));
+      if (extractedText2 !== '' || msg2 !== '') {
+        populateItems('', '',  '',data.extracted_text2, '');
+      }
     } catch (error) {
       console.error('Error uploading image:', error);
       setMsg('Failed to upload image');
@@ -277,7 +292,7 @@ function App() {
             </div>
             <div className="form-group">
               <label>Spent:</label>
-              <input type="text" name="spent" value={newItem.spent} onChange={handleInputChange} />
+              <input type="text" name="spent($)" value={newItem.spent} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Expiry Date:</label>
@@ -316,11 +331,11 @@ function App() {
             <div className="scan-options">
               <form onSubmit={handleUpload3} encType="multipart/form-data">
                 <input type="file" name="file2" onChange={handleFileChange2} />
+                <input type="submit" value="Upload" />
               </form>
               {imgSrc2 && <img src={imgSrc2} alt="Uploaded" />}
             </div>
             <button onClick={() => togglePopup('package')}>Cancel</button>
-            <button onClick={handleUpload3}>Upload</button>
           </div>
         )}
 

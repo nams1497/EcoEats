@@ -2,6 +2,7 @@ from flask import Flask,request, redirect, url_for,jsonify
 import os
 import cv2
 from ocr_core import ocr_core
+from ocr_core2 import expiry
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 from keras.models import Model, load_model
@@ -127,9 +128,11 @@ def serve2():
             return send_from_directory(app.static_folder, 'index.html')
 
         if file and allowed_file(file.filename):
-
+            basepath = os.path.dirname(__file__)
+            file_path = os.path.join(basepath, 'uploads', secure_filename(file.filename))
+            file.save(file_path)
             # call the OCR function on it
-            extracted_text = ocr_core(file)
+            extracted_text = expiry(file_path)
 
             # extract the text and display it
             return jsonify({"msg2": "Successfully processed", "extracted_text2": extracted_text})
