@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/eco-eats/static/css/main.36c6514c.css",
+    "main.js": "/eco-eats/static/js/main.8d9d2ab4.js",
+    "static/js/453.2a4f875e.chunk.js": "/eco-eats/static/js/453.2a4f875e.chunk.js",
+    "static/media/back.jpg": "/eco-eats/static/media/back.d11de2f19e8ebf59303a.jpg",
+    "index.html": "/eco-eats/index.html",
+    "main.36c6514c.css.map": "/eco-eats/static/css/main.36c6514c.css.map",
+    "main.8d9d2ab4.js.map": "/eco-eats/static/js/main.8d9d2ab4.js.map",
+    "453.2a4f875e.chunk.js.map": "/eco-eats/static/js/453.2a4f875e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.36c6514c.css",
+    "static/js/main.8d9d2ab4.js"
+  ]
+}
