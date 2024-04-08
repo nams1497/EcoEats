@@ -7,10 +7,10 @@ from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 
 # from keras.models import Model, load_model
-from tensorflow.keras.models import Model, load_model
+# from tensorflow.keras.models import Model, load_model
 
 from werkzeug.utils import secure_filename
-from tensorflow.keras.preprocessing.image import load_img,img_to_array
+# from tensorflow.keras.preprocessing.image import load_img,img_to_array
 import numpy as np
 
 
