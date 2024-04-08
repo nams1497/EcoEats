@@ -13,12 +13,13 @@
     "react-webcam": "^7.2.0",
     "serve": "^14.2.1"
   },
-  "scripts": {
-    "start": "npm run build && serve -s inventory/build",
-    "build": "cd inventory && npm run build",
-    "test": "cd inventory && npm test",
-    "eject": "cd inventory && npm run eject"
-  },
+"scripts": {
+  "start": "npm run build && serve -s inventory/build",
+  "build": "cd inventory && npm install --force && npm run build",
+  "test": "cd inventory && npm test",
+  "eject": "cd inventory && npm run eject"
+},
+
   "engines": {
     "node": "20.x",
     "npm": "10.x"
