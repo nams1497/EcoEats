@@ -34,7 +34,7 @@ function App() {
   const [msg2, setMsg2] = useState('');
   const [file2, setFile2] = useState(null);
   const [imgSrc2, setImgSrc2] = useState('');
-  const [extractedText2, setExtractedText2] = useState(''); 
+  const [extractedText2, setExtractedText2] = useState('');
   const webcamRef = useRef(null);
 
   // Define handleEditItem function
@@ -87,9 +87,48 @@ function App() {
     }
   };
 
+const isValidDate = (dateString) => {
+    // Check if the date string is in the format 'DD Mon YYYY' (e.g., '15 Apr 2024')
+    const regex = /^(0?[1-9]|[12][0-9]|3[01]) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}$/;
+    return regex.test(dateString);
+  };
+
+const validateInput = (name, value) => {
+    let errorMessage = '';
+
+    switch (name) {
+      case 'name':
+        errorMessage = value.trim() === '' ? 'Name is required' : '';
+        break;
+      case 'amount':
+        errorMessage = isNaN(value) || value < 0 ? 'Amount must be a positive number' : '';
+        break;
+      case 'spent':
+        errorMessage = /^\$?\d+(\.\d{1,2})?$/.test(value) ? '' : 'Invalid spent amount';
+        break;
+      case 'expiryDate':
+        errorMessage = isValidDate(value) ? '' : 'Invalid date format (e.g., 15 Apr 2024)';
+        break;
+      // Add validation rules for other fields if needed
+      default:
+        break;
+
+     return 1;
+    }
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+
+    if(validateInput(name, value))
+    {
     setNewItem({ ...newItem, [name]: value });
+    }
+    else
+    {
+    alert('Please fix the errors before adding the item.');
+    }
+    }
+
   };
 
   const handleAddItem = () => {
@@ -263,7 +302,7 @@ function App() {
             <p></p>
           )}
         </div>
-        <div> */} 
+        <div> */}
           {/* Remove this form */}
           {/* <form onSubmit={handleUpload2} encType="multipart/form-data">
             <p>
@@ -294,7 +333,8 @@ function App() {
             </div>
             <div className="form-group">
               <label>Spent:</label>
-              <input type="text" name="spent($)" value={newItem.spent} onChange={handleInputChange} />
+            <input type="text" name="spent" value={newItem.spent} onChange={handleInputChange} />
+
             </div>
             <div className="form-group">
               <label>Expiry Date:</label>
@@ -369,7 +409,7 @@ function App() {
               </form>
               {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
               {/* populateItems(extractedText1, '', '', msg1, ''); */}
-             </div> 
+             </div>
             {/* <button onClick={() => {
               document.getElementById("uploadForm").submit();
               populateItems(extractedText1, '', '', msg1, '');
