@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import InventoryList from './components/InventoryList';
 import './App.css';
 
-
 function App() {
   const [inventory, setInventory] = useState(() => {
     const storedInventory = localStorage.getItem('inventory');
@@ -87,13 +86,13 @@ function App() {
     }
   };
 
-const isValidDate = (dateString) => {
+  const isValidDate = (dateString) => {
     // Check if the date string is in the format 'DD Mon YYYY' (e.g., '15 Apr 2024')
     const regex = /^(0?[1-9]|[12][0-9]|3[01]) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}$/;
     return regex.test(dateString);
   };
 
-const validateInput = (name, value) => {
+  const validateInput = (name, value) => {
     let errorMessage = '';
 
     switch (name) {
@@ -112,23 +111,20 @@ const validateInput = (name, value) => {
       // Add validation rules for other fields if needed
       default:
         break;
-
-     return 1;
     }
+
+    return errorMessage;
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    const errorMessage = validateInput(name, value);
 
-    if(validateInput(name, value))
-    {
-    setNewItem({ ...newItem, [name]: value });
+    if (!errorMessage) {
+      setNewItem({ ...newItem, [name]: value });
+    } else {
+      alert('Please fix the errors before adding the item.');
     }
-    else
-    {
-    alert('Please fix the errors before adding the item.');
-    }
-    }
-
   };
 
   const handleAddItem = () => {
@@ -262,63 +258,29 @@ const validateInput = (name, value) => {
   };
 
   return (
-  <div>
-  <div className="toolbar">
+    <div>
+      <div className="toolbar">
         <button onClick={() => console.log("Check your Savings clicked")}>Check your Savings</button>
         <button onClick={() => console.log("Recipes clicked")}>Recipes</button>
         <button onClick={() => console.log("Information clicked")}>Information</button>
         <button onClick={() => console.log("Recycling Agencies Clicked")}>Recycling Agencies</button>
         <button onClick={() => console.log("Check My Knowledge Clicked")}>Check My Knowledge</button>
       </div>
-    <div className="App">
-
-      <header>Your Fridge</header>
-      <InventoryList
-        inventory={inventory}
-        onEdit={handleEditItem}
-        onDelete={handleDeleteItem}
-      />
-      <div className="actions">
-        <button className="add-button" onClick={() => togglePopup('add')}>Add Manually</button>
-        <div className="scan-buttons">
-          <button onClick={() => togglePopup('receipt')}>Scan Receipt</button>
-          <button onClick={() => togglePopup('package')}>Scan Package</button>
-          <button onClick={() => togglePopup('produce')}>Scan Fresh Produce</button>
+      <div className="App">
+        <header>Your Fridge</header>
+        <InventoryList
+          inventory={inventory}
+          onEdit={handleEditItem}
+          onDelete={handleDeleteItem}
+        />
+        <div className="actions">
+          <button className="add-button" onClick={() => togglePopup('add')}>Add Manually</button>
+          <div className="scan-buttons">
+            <button onClick={() => togglePopup('receipt')}>Scan Receipt</button>
+            <button onClick={() => togglePopup('package')}>Scan Package</button>
+            <button onClick={() => togglePopup('produce')}>Scan Fresh Produce</button>
+          </div>
         </div>
-        {/* <div>
-          {msg && <h1></h1>}
-          <form onSubmit={handleUpload} encType="multipart/form-data">
-            <p>
-              {/* Remove this input */}
-              {/* <input type="file" name="file" onChange={handleFileChange} /> */}
-            {/* </p>
-          </form>
-          {imgSrc && <img src={imgSrc} alt="Uploaded" />}
-          {extractedText ? (
-            <p>
-              <b>{extractedText}</b>
-            </p>
-          ) : (
-            <p></p>
-          )}
-        </div>
-        <div> */}
-          {/* Remove this form */}
-          {/* <form onSubmit={handleUpload2} encType="multipart/form-data">
-            <p>
-              <input type="file" name="file1" onChange={handleFileChange1} />
-              <input type="submit" value="Upload" />
-            </p>
-          </form> */}
-          {/* {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-          {extractedText1 ? (
-            <p>
-              <b>{extractedText1}</b>
-            </p>
-          ) : (
-            <p></p>
-          )}
-        </div> */}
         {/* Add Popup */}
         {showAddPopup && (
           <div className="popup large-popup">
@@ -333,8 +295,7 @@ const validateInput = (name, value) => {
             </div>
             <div className="form-group">
               <label>Spent:</label>
-            <input type="text" name="spent" value={newItem.spent} onChange={handleInputChange} />
-
+              <input type="text" name="spent" value={newItem.spent} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Expiry Date:</label>
@@ -350,7 +311,6 @@ const validateInput = (name, value) => {
             </div>
           </div>
         )}
-
         {/* Scan Receipt Popup */}
         {showScanReceiptPopup && (
           <div className="popup">
@@ -365,7 +325,6 @@ const validateInput = (name, value) => {
             <button onClick={() => togglePopup('receipt')}>Cancel</button>
           </div>
         )}
-
         {/* Scan Package Popup */}
         {showScanPackagePopup && (
           <div className="popup">
@@ -380,45 +339,21 @@ const validateInput = (name, value) => {
             <button onClick={() => togglePopup('package')}>Cancel</button>
           </div>
         )}
-
         {/* Scan Fresh Produce Popup */}
         {showScanProducePopup && (
           <div className="popup">
             <h2>Scan Produce</h2>
-            {/* <div className="scan-options">
-              <form id="uploadForm" onSubmit={handleUpload2} encType="multipart/form-data">
-              <p>
-              <input type="file" name="file1" onChange={handleFileChange1} />
-              <input type="submit" value="Upload" />
-              </p>
-              </form>
-              {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-              {extractedText1 ? (
-                <p>
-                  <b>{extractedText1}</b>
-                </p>
-              ) : (
-                <p></p>
-              )}
-            </div> */}
-
             <div className="scan-options">
               <form id="uploadForm" onSubmit={handleUpload2} encType="multipart/form-data">
-              <input type="file" name="file1" onChange={handleFileChange1} />
-              <input type="submit" value="Upload" />
+                <input type="file" name="file1" onChange={handleFileChange1} />
+                <input type="submit" value="Upload" />
               </form>
               {imgSrc1 && <img src={imgSrc1} alt="Uploaded" />}
-              {/* populateItems(extractedText1, '', '', msg1, ''); */}
-             </div>
-            {/* <button onClick={() => {
-              document.getElementById("uploadForm").submit();
-              populateItems(extractedText1, '', '', msg1, '');
-              }}>Upload</button> */}
+            </div>
             <button onClick={() => togglePopup('produce')}>Cancel</button>
           </div>
         )}
       </div>
-    </div>
     </div>
   );
 }
