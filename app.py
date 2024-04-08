@@ -186,68 +186,42 @@
 ###Eishi code below
 ########################
 
-
 from flask import Flask, request, jsonify, send_from_directory
 import os
-import cv2
-from ocr_core import ocr_core
-from ocr_core2 import expiry
+from werkzeug.utils import secure_filename
 from flask_cors import CORS
 
-from werkzeug.utils import secure_filename
-
-UPLOAD_FOLDER = '/static/uploads/'
-
-# Dictionary for labels and shelf life in days
-labels = {
-    # Your labels dictionary
-}
-
-# Allowed file extensions
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
+# Initialize Flask app
 app = Flask(__name__, static_folder='inventory/build', static_url_path='')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# Your OCR and expiry logic here
+def ocr_core(file):
+    # Placeholder for your OCR function
+    return "OCR result placeholder"
+
+def expiry(file_path):
+    # Placeholder for your expiry logic
+    return "Expiry placeholder"
 
 @app.route('/api', methods=['GET'])
 def index():
-    return {"tutorial": "Flask React Heroku"}
+    return {"message": "API is working"}
 
-@app.route('/', methods=['GET', 'POST'])
-def serve1():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '' or not allowed_file(file.filename):
-            return redirect(request.url)
-        extracted_text1 = ocr_core(file)
-        name = extracted_text1[0]['name']
-        extracted_text = extracted_text1[0]['amount']
-        msg = extracted_text1[0]['spent']
-        return jsonify({"msg": msg, "extracted_text": extracted_text, "name": name})
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/recpt', methods=['GET', 'POST'])
-def serve2():
-    if request.method == 'POST':
-        if 'file2' not in request.files:
-            return redirect(request.url)
-        file = request.files['file2']
-        if file.filename == '' or not allowed_file(file.filename):
-            return redirect(request.url)
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"})
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"})
+    if file:
         filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join('/tmp', filename)
         file.save(file_path)
-        extracted_text = expiry(file_path)
-        return jsonify({"msg2": "Successfully processed", "extracted_text2": extracted_text})
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+        ocr_result = ocr_core(file)
+        expiry_result = expiry(file_path)
+        return jsonify({"ocr": ocr_result, "expiry": expiry_result})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
