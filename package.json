@@ -15,10 +15,11 @@
   },
 "scripts": {
   "start": "npm run build && serve -s inventory/build",
-  "build": "cd inventory && npm install --force && npm run build",
+  "build": "cd inventory && npm install --legacy-peer-deps && npm run build",
   "test": "cd inventory && npm test",
   "eject": "cd inventory && npm run eject"
 },
+
 
   "engines": {
     "node": "20.x",
