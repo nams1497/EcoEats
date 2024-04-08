@@ -11,5 +11,5 @@ This build:
 Our build includes an Inventory Management system to confront climate issues related to food waste. This solution is crucial as it directly equips users with the means to reduce food waste, save money, and become more environmentally responsible, ultimately contributing to the mitigation of climate change.
 
 
-The application is a Flask application, deployed on Heroku:
-<URL to be updated>
+The application is a React application, deployed on Github:
+https://main--sprightly-frangipane-034d4a.netlify.app
