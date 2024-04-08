@@ -7,20 +7,19 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@material-ui/core": "^4.12.4",
-   "react-dom": "^16.8.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-scripts": "^5.0.1",
     "react-webcam": "^7.2.0",
     "serve": "^14.2.1"
   },
-"scripts": {
-  "start": "npm run build && serve -s inventory/build",
-  "build": "cd inventory && npm run build",
-  "test": "cd inventory && npm test",
-  "eject": "cd inventory && npm run eject"
-},
-
-
+  "scripts": {
+    "start": "npm run build && serve -s inventory/build",
+    "build": "cd inventory && npm run build",
+    "test": "cd inventory && npm test",
+    "eject": "cd inventory && npm run eject"
+  },
   "engines": {
     "node": "20.x",
     "npm": "10.x"
