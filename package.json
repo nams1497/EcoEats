@@ -1,9 +1,20 @@
 {
+  "name": "root-project",
+  "version": "1.0.0",
+  "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@material-ui/core": "^4.12.4",
     "react-icons": "^5.0.1",
-    "react-webcam": "^7.2.0"
+    "react-webcam": "^7.2.0",
+    "serve": "^14.2.1"
+  },
+  "scripts": {
+    "start": "serve -s inventory/build",
+    "build": "cd inventory && npm run build",
+    "test": "cd inventory && npm test",
+    "eject": "cd inventory && npm run eject"
   }
 }
